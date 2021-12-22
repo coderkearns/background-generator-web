@@ -1,12 +1,9 @@
 // A really nice techno-looking color scheme
-const colorScheme = parseColorScheme(`
-// techno blue
-003049
-// white
-FDFDFD
-// techno orange
-F7941D
-`)
+let defaultColorScheme = "003049,FDFDFD,F7941D"
+
+// get the color scheme from the URL query string ( EX ?theme=003049,FDFDFD,F7941D)
+const theme = new URLSearchParams(window.location.search).get("theme") || defaultColorScheme
+const colorScheme = parseColorScheme(theme);
 
 // set page background color to match color scheme
 document.body.style.backgroundColor = colorScheme.background;
@@ -47,23 +44,10 @@ function openPng() {
 }
 
 function parseColorScheme(str) {
-    /* parseColorScheme:
-    takes a string like: "
-    D62828
-    003049
-    003049
-    "
-    and returns an object like:
-    {
-        background: '#D62828',
-        colors: ['#D62828', '#003049']
-    }
-
-    it ignores comments and empty lines
-    */
-    const lines = str.split('\n').filter(line => line.trim() !== '' && !line.startsWith('//')).map(line => ("#" + line.trim()).replace("##", "#"));
+    console.log(str)
+    const colors = str.split(',').map(a => "#" + a).map(a => a.replace("##", "#"));
     return {
-        background: lines[0],
-        colors: lines.slice(1)
+        background: colors[0],
+        colors: colors.slice(1),
     }
 }
